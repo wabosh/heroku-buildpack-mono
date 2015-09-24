@@ -6,7 +6,7 @@ Mono buildpack for heroku, built on every stable mono build.
 
 C# console apps running on the latest (T-minus 2 hours) mono version.
 
-Note: ASP and similar aren't supported. For that, use Heroku's unofficial official buildpack: [heroku/dotnet-buildpack](https://github.com/heroku/dotnet-buildpack).
+Note: ASP isn't supported. For that, use Heroku's unofficial official buildpack: [heroku/dotnet-buildpack](https://github.com/heroku/dotnet-buildpack). That doesn't mean you can't run webservers; things like self-hosting OWIN and Nancy work perfectly. I recommend [Nowin](//github.com/Bobris/Nowin).
 
 #### how to use this
 
