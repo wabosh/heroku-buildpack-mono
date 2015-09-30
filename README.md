@@ -36,11 +36,11 @@ MONO_TYPE=minimal
 MONO_CACHE=nope
 ````
 
-#### how this works
+#### how your app is built
 
-1. The latest built version for mono is downloaded from Github's Releases
-2. Nuget dependencies are restored
-3. The solution is built using mono's `xbuild`
+1. The latest version of mono is downloaded from the Releases
+2. NuGet dependencies are restored
+3. The solution is compiled using mono's `xbuild` (msbuild)
 
 #### how mono is built
 
