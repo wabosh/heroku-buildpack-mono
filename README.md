@@ -14,7 +14,7 @@ You can still run webservers; self-hosting OWIN and NancyFx work perfectly. I re
 1. Put a solution in the root directory of your app
 2. Use nuget to get dependencies
 3. Run `heroku buildpacks:set https://github.com/AdamBurgess/heroku-buildpack-mono` to set the buildpack
-4. Optionally configure the version of mono using a `.mono` file.
+4. Optionally configure the version of mono using a `.mono` file
 5. Add `mono ProjectName.exe` to your Procfile. Apps will be built into the root directory
 
 #### more options
