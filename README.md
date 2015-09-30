@@ -24,10 +24,11 @@ Create a `.mono` file to configure more options:
 
 ````bash
 # put a tag name here that has a corresponding release to specify a version*
+# omitting this will use the latest available mono version
 MONO_VERSION=96e40c5793ff
 # specify the build you want, either minimal (default) or full
 # see below for explanation
-MONO_TYPE=full
+MONO_TYPE=minimal
 # if this is set, the cache is not used/cleaned.
 # the cache is used to 1) store mono builds and 2) store nuget packages
 MONO_CACHE=nope
