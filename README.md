@@ -4,16 +4,34 @@ Mono buildpack for heroku, built on every stable mono build.
 
 #### what to use this for
 
-C# console apps running on the latest (T-minus 2 hours) mono version.
+C# console apps running on the latest (T-minus 2 hours) mono version. (or, any mono version available, starting from 4.0.4*)
 
-Note: ASP isn't supported. For that, use Heroku's unofficial official buildpack: [heroku/dotnet-buildpack](https://github.com/heroku/dotnet-buildpack). That doesn't mean you can't run webservers; things like self-hosting OWIN and Nancy work perfectly. I recommend [Nowin](//github.com/Bobris/Nowin).
+Note: If you're running on ASP, use Heroku's unofficial official buildpack instead: [heroku/dotnet-buildpack](https://github.com/heroku/dotnet-buildpack).
+
+You can still run webservers; self-hosting OWIN and NancyFx work perfectly. I recommend [Nowin](//github.com/Bobris/Nowin).
 
 #### how to use this
 
 1. Put a solution in the root directory of your app
 2. Use nuget to get dependencies
-3. Add https://github.com/AdamBurgess/heroku-buildpack-mono.git to your BUILDPACK_URL
-4. Add `mono ProjectName.exe` to your Procfile. Apps will be built into the root directory
+3. Run `heroku buildpacks:set https://github.com/AdamBurgess/heroku-buildpack-mono` to set the buildpack
+4. Optionally configure the version of mono using a `.mono` file.
+5. Add `mono ProjectName.exe` to your Procfile. Apps will be built into the root directory
+
+#### more options
+
+Create a `.mono` file to configure more options:
+
+````bash
+# put a tag name here that has a corresponding release to specify a version*
+MONO_VERSION=96e40c5793ff
+# specify the build you want, either minimal (default) or full
+# see below for explanation
+MONO_TYPE=full
+# if this is set, the cache is not used/cleaned.
+# the cache is used to 1) store mono builds and 2) store nuget packages
+MONO_CACHE=nope
+````
 
 #### how this works
 
@@ -28,3 +46,16 @@ Note: ASP isn't supported. For that, use Heroku's unofficial official buildpack:
 3. A [scheduled task](//github.com/AdamBurgess/heroku-buildpack-mono-watcher) checks Jenkins every hour to see if a new build has completed and passed all tests.
 4. If it has, it creates a new commit in [another project](//github.com/AdamBurgess/heroku-buildpack-mono-builder) which makes [Circle CI](//circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder) start building Mono.
 5. Once completed, it then creates a commit, tag, and release here, which is fetched by Heroku on building your app.
+
+#### full vs minimal builds
+The builder creates two version of mono:
+1. Full build. ~95mb slug size increase.
+  * Includes everything, including libgdiplus, boehm, libraries (e.g. for use in mkbundle).
+2. Minimal build. ~30mb slug size increase.
+  * Removes shared libraries, boehm, includes, System.Windows.Forms
+
+For most, the minimal build will work fine, and it is the default. Enable the full build if you need its resources or are having problems.
+
+#### * I want version [x] of Mono. How can I get it?
+
+Create a pull request in [AdamBurgess/heroku-buildpack-mono-builder](//github.com/AdamBurgess/heroku-buildpack-mono-builder) changing the `latest` file to the tag or commit that you want, and I'll merge and see that it builds successfully.
