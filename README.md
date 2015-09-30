@@ -2,8 +2,9 @@ Mono buildpack for heroku, built on every stable mono build.
 
 [![](https://circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder.png?style=shield&circle-token=fe5a1697660ac8727b496f624407ea006b2069d7)](https://circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder)
 
-Want a quick-start? Click here to create a sample app using Owin, Web API, and Razor.  
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/AdamBurgess/sample-heroku-mono-app)
+Want a quick-start? Click to deploy your own app using Owin, Web API, and Razor.  
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/AdamBurgess/sample-heroku-mono-app)  
+Or view the sample app online: https://sample-heroku-mono-app.herokuapp.com/
 
 #### what to use this for
 
