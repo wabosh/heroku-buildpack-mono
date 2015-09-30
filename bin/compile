@@ -1,0 +1,157 @@
+#!/bin/bash
+# bin/compile <build-dir> <cache-dir>
+
+# fail fast
+set -e
+
+# debug
+# set -x
+
+# parse and derive params
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+# This is where the buildpack is stored
+BUILDPACK_DIR=`cd $(dirname $0); cd ..; pwd`
+
+function warn() {
+  echo " !     warning: $*" >&2
+}
+
+function error() {
+  echo " !     error: $*" >&2
+  exit 1
+}
+
+function topic() {
+  echo "-----> $*"
+}
+
+function indent() {
+  sed -u 's/^/       /'
+}
+
+MONO_VERSION=`cat $BUILDPACK_DIR/latest`
+MONO_TYPE="minimal"
+
+if [[ -f $BUILD_DIR/.mono ]]; then
+  source $BUILD_DIR/.mono
+fi
+
+if [[ $MONO_TYPE -ne "full" && $MONO_TYPE -ne "minimal" ]]; then
+  warn "MONO_TYPE must be 'minimal' or 'full': '$MONO_TYPE'"
+  warn "Setting MONO_TYPE to 'full'"
+  MONO_TYPE="full"
+fi
+
+MONO_CACHE_DIR=$CACHE_DIR/mono-adamb
+mkdir -p $MONO_CACHE_DIR
+
+if [ -n "$MONO_CACHE" ]; then
+  # cache clearing requested
+  rm -rf $MONO_CACHE_DIR/*
+fi
+
+set +e
+MONO_FALLBACK=false
+MONO_LOCATION=$MONO_CACHE_DIR/${MONO_VERSION}-${MONO_TYPE}.tar.xz
+if [[ -f $MONO_LOCATION ]]; then
+  topic "Restoring mono version $MONO_VERSION-$MONO_TYPE from cache"
+else
+  # clear mono cache on failed download
+  rm -rf $MONO_CACHE_DIR/*
+  topic "Installing mono version $MONO_VERSION-$MONO_TYPE"
+
+  MONO_URL="https://github.com/AdamBurgess/heroku-buildpack-mono/releases/download/$MONO_VERSION/mono-$MONO_TYPE.tar.xz"
+  FALLBACK_URL="https://github.com/AdamBurgess/heroku-buildpack-mono/releases/download/mono-4.0.4.1/mono-$MONO_TYPE.tar.xz"
+
+  topic "Downloading $MONO_URL"
+  curl $MONO_URL -Lfs >$MONO_LOCATION
+  if [ $? -ne 0 ]; then
+    warn "Failed to download $MONO_URL"
+    rm -rf $MONO_LOCATION
+    MONO_LOCATION=/tmp/mono.tar.xz
+    MONO_FALLBACK=true
+    topic "Downloading fallback mono (v4.0.4): $FALLBACK_URL"
+    curl $FALLBACK_URL -Lfs >$MONO_LOCATION
+    if [ $? -ne 0 ]; then
+      error "Failed to download $FALLBACK_URL. Is GitHub down?"
+    fi
+  fi
+fi
+
+set -e
+
+tar xJf $MONO_LOCATION -C $BUILD_DIR
+
+# mono expects to be running out of /app/mono
+ln -s $BUILD_DIR/mono /app/mono
+mkdir -p $BUILD_DIR/.config/.mono/certs
+ln -s $BUILD_DIR/.config /app/.config
+
+export PATH="/app/mono/bin:$PATH"
+export LD_LIBRARY_PATH="/app/mono/lib:$LD_LIBRARY_PATH"
+export MONO_CONFIG="/app/mono/etc/mono/config"
+
+# install certificates from the host
+# using this ensures that the certs are managed by heroku
+topic "Installing SSL certificates"
+mcs $BUILDPACK_DIR/scripts/cert-sync.cs /r:Mono.Security.dll /out:$BUILDPACK_DIR/cert-sync.exe
+mono $BUILDPACK_DIR/cert-sync.exe --quiet /etc/ssl/certs/ca-certificates.crt
+
+# most of these are needed for tools like mkbundle to work
+# (and will only work with the 'full' mono build)
+mkdir -p $BUILD_DIR/.profile.d
+cat <<EOF >$BUILD_DIR/.profile.d/mono-adamb.sh
+export PATH="\$PATH:/app/mono/bin"
+export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:/app/mono/lib"
+export LIBRARY_PATH="\$LIBRARY_PATH:/app/mono/lib"
+export INCLUDE_PATH="\$INCLUDE_PATH:/app/mono/include"
+export PKG_CONFIG_PATH="\$PKG_CONFIG_PATH:/app/mono/lib/pkgconfig"
+export MONO_CFG_DIR="/app/mono/etc"
+export MONO_CONFIG="/app/mono/etc/mono/config"
+export MONO_GAC_PREFIX="/app/mono"
+EOF
+
+set +e
+
+curl https://nuget.org/nuget.exe -Lfs > $BUILDPACK_DIR/nuget.exe
+NUGET_STATUS=$?
+
+set -e
+
+# now that mono is installed, build the app
+cd $BUILD_DIR
+
+# find a solution file
+SLN=$(find . -maxdepth 1 -iname "*.sln")
+if [ $( echo "${SLN}" | wc -l ) -gt 1 ]; then
+  error "Too many *.sln files"
+fi
+
+if [ "${SLN}" == "" ]; then
+  error "No *.sln file found"
+fi
+
+if [ $NUGET_STATUS -ne 0 ]; then
+  warn "Failed to download nuget - build may fail"
+else
+  topic "Installing NuGet packages"
+  # restore packages folder from cache
+  if [ -d $MONO_CACHE_DIR/packages ]; then
+    mv $MONO_CACHE_DIR/packages $BUILD_DIR
+  fi
+  mono $BUILDPACK_DIR/nuget.exe restore -NonInteractive | indent
+  # and copy it back
+  if [ -d $BUILD_DIR/packages ]; then
+    mkdir -p $MONO_CACHE_DIR/packages
+    cp -r $BUILD_DIR/packages/* $MONO_CACHE_DIR/packages
+  fi
+fi
+
+topic "Compiling .NET application"
+xbuild /property:Configuration=Release /property:OutDir=$BUILD_DIR/ $SLN
+
+if $MONO_FALLBACK; then
+  warn "Mono $MONO_VERSION-$MONO_TYPE failed to install. Mono v4.0.4-$MONO_TYPE was installed instead." 
+fi

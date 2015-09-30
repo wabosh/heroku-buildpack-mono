@@ -1,0 +1,9 @@
+#!/bin/bash
+# bin/detect <build-dir>
+
+if [ -f "$( find $1 -maxdepth 1 -iname *.sln )" ]; then
+    echo ".NET"
+    exit 0
+else
+    exit 1
+fi
