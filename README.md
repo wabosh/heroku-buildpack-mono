@@ -52,11 +52,14 @@ MONO_CACHE=nope
 5. Once completed, it then creates a commit, tag, and release here, which is fetched by Heroku on building your app.
 
 #### full vs minimal builds
-The builder creates two version of mono:
+The builder creates two versions of mono:
+
 1. Full build. ~95mb slug size increase.
   * Includes everything, including libgdiplus, boehm, libraries (e.g. for use in mkbundle).
+
 2. Minimal build. ~30mb slug size increase.
-  * Removes shared libraries, boehm, includes, System.Windows.Forms
+  * Removes shared libraries, boehm, header includes, System.Windows.Forms
+  * libgdiplus is included
 
 For most, the minimal build will work fine, and it is the default. Enable the full build if you need its resources or are having problems.
 
