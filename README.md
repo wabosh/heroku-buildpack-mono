@@ -47,7 +47,7 @@ MONO_CACHE=nope
 
 1. Someone pushes to [mono/mono](//github.com/mono/mono)
 2. Mono's CI server, [Jenkins](//jenkins.mono-project.com/job/test-mono-mainline/label=debian-amd64/), compiles and runs the test suite for mono.
-3. A [scheduled task](//github.com/AdamBurgess/heroku-buildpack-mono-watcher) checks Jenkins every hour to see if a new build has completed and passed all tests.
+3. A [scheduled task](//github.com/AdamBurgess/heroku-buildpack-mono-watcher) checks Jenkins daily to see if a new build has completed and passed all tests.
 4. If it has, it creates a new commit in [another project](//github.com/AdamBurgess/heroku-buildpack-mono-builder) which makes [Circle CI](//circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder) start building Mono.
 5. Once completed, it then creates a commit, tag, and release here, which is fetched by Heroku on building your app.
 
