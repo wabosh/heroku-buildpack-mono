@@ -1,4 +1,4 @@
-Mono buildpack for heroku, built on every stable mono build.
+Mono buildpack for heroku, with the latest daily mono release.
 
 [![](https://circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder.png?style=shield&circle-token=fe5a1697660ac8727b496f624407ea006b2069d7)](https://circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder)
 
@@ -8,7 +8,7 @@ Or view the sample app online: https://sample-heroku-mono-app.herokuapp.com/
 
 #### what to use this for
 
-C# console apps running on the latest (T-minus 2 hours) mono version. (or, any mono version available, starting from 4.0.4*)
+C# console apps running on the latest mono version, which is built daily. Or: choose any version of mono (starting from 4.0.4*)
 
 Note: If you're running on ASP, use Heroku's unofficial official buildpack instead: [heroku/dotnet-buildpack](https://github.com/heroku/dotnet-buildpack).  
 You can still run webservers; self-hosting OWIN and NancyFx work perfectly. I recommend [Nowin](//github.com/Bobris/Nowin).
