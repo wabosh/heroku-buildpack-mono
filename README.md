@@ -1,6 +1,4 @@
-Mono buildpack for heroku, with the latest daily mono release.
-
-[![](https://circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder.png?style=shield&circle-token=fe5a1697660ac8727b496f624407ea006b2069d7)](https://circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder)
+Mono buildpack for heroku, with the latest daily mono release.   [![](https://circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder.png?style=shield&circle-token=fe5a1697660ac8727b496f624407ea006b2069d7)](https://circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder)
 
 Want a quick-start? Click to deploy your own app using Owin, Web API, and Razor.  
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/AdamBurgess/sample-heroku-mono-app)  
