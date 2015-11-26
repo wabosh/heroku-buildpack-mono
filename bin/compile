@@ -63,7 +63,7 @@ else
   topic "Installing mono version $MONO_VERSION-$MONO_TYPE"
 
   MONO_URL="https://github.com/AdamBurgess/heroku-buildpack-mono/releases/download/$MONO_VERSION/mono-$MONO_TYPE.tar.xz"
-  FALLBACK_URL="https://github.com/AdamBurgess/heroku-buildpack-mono/releases/download/mono-4.0.4.1/mono-$MONO_TYPE.tar.xz"
+  FALLBACK_URL="https://github.com/AdamBurgess/heroku-buildpack-mono/releases/download/mono-4.2.1.102/mono-$MONO_TYPE.tar.xz"
 
   topic "Downloading $MONO_URL"
   curl $MONO_URL -Lfs >$MONO_LOCATION
