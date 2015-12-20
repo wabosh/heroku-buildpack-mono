@@ -1,9 +1,5 @@
 Mono buildpack for heroku, with the latest daily mono release.   [![](https://circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder.png?style=shield&circle-token=fe5a1697660ac8727b496f624407ea006b2069d7)](https://circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder)
 
-Want a quick start? Click to deploy a sample app using Owin, Web API, and Razor.
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/AdamBurgess/sample-heroku-mono-app)  
-Or view the sample app online: https://sample-heroku-mono-app.herokuapp.com/
-
 #### what to use this for
 
 C# console apps running on the latest mono version, which is built daily. Or: choose any version of mono (starting from 4.0.4*)
