@@ -72,7 +72,7 @@ else
     rm -rf $MONO_LOCATION
     MONO_LOCATION=/tmp/mono.tar.xz
     MONO_FALLBACK=true
-    topic "Downloading fallback mono (v4.0.4): $FALLBACK_URL"
+    topic "Downloading fallback mono (v4.2.1): $FALLBACK_URL"
     curl $FALLBACK_URL -Lfs >$MONO_LOCATION
     if [ $? -ne 0 ]; then
       error "Failed to download $FALLBACK_URL. Is GitHub down?"
@@ -154,5 +154,5 @@ topic "Compiling .NET application"
 xbuild /property:Configuration=Release /property:OutDir=$BUILD_DIR/ $SLN
 
 if $MONO_FALLBACK; then
-  warn "Mono $MONO_VERSION-$MONO_TYPE failed to install. Mono v4.0.4-$MONO_TYPE was installed instead." 
+  warn "Mono $MONO_VERSION-$MONO_TYPE failed to install. Mono v4.2.1-$MONO_TYPE was installed instead." 
 fi
