@@ -63,7 +63,7 @@ else
   topic "Installing mono version $MONO_VERSION-$MONO_TYPE"
 
   MONO_URL="https://github.com/AdamBurgess/heroku-buildpack-mono/releases/download/$MONO_VERSION/mono-$MONO_TYPE.tar.xz"
-  FALLBACK_URL="https://github.com/AdamBurgess/heroku-buildpack-mono/releases/download/mono-4.2.1.102/mono-$MONO_TYPE.tar.xz"
+  FALLBACK_URL="https://github.com/AdamBurgess/heroku-buildpack-mono/releases/download/mono-4.2.2.30/mono-$MONO_TYPE.tar.xz"
 
   topic "Downloading $MONO_URL"
   curl $MONO_URL -Lfs >$MONO_LOCATION
@@ -72,7 +72,7 @@ else
     rm -rf $MONO_LOCATION
     MONO_LOCATION=/tmp/mono.tar.xz
     MONO_FALLBACK=true
-    topic "Downloading fallback mono (v4.2.1): $FALLBACK_URL"
+    topic "Downloading fallback mono (v4.2.2): $FALLBACK_URL"
     curl $FALLBACK_URL -Lfs >$MONO_LOCATION
     if [ $? -ne 0 ]; then
       error "Failed to download $FALLBACK_URL. Is GitHub down?"
