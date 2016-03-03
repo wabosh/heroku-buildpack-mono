@@ -97,7 +97,7 @@ export MONO_CONFIG="/app/mono/etc/mono/config"
 # using this ensures that the certs are managed by heroku
 topic "Installing SSL certificates"
 mcs $BUILDPACK_DIR/scripts/cert-sync.cs /r:Mono.Security.dll /out:$BUILDPACK_DIR/cert-sync.exe
-mono $BUILDPACK_DIR/cert-sync.exe --quiet --user /etc/ssl/certs/ca-certificates.crt
+mono $BUILDPACK_DIR/cert-sync.exe --user /etc/ssl/certs/ca-certificates.crt
 
 # most of these are needed for tools like mkbundle to work
 # (and will only work with the 'full' mono build)
