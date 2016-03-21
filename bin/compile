@@ -38,7 +38,7 @@ if [[ -f $BUILD_DIR/.mono ]]; then
   source $BUILD_DIR/.mono
 fi
 
-if [[ $MONO_TYPE -ne "full" && $MONO_TYPE -ne "minimal" ]]; then
+if [[ $MONO_TYPE != "full" && $MONO_TYPE != "minimal" ]]; then
   warn "MONO_TYPE must be 'minimal' or 'full': '$MONO_TYPE'"
   warn "Setting MONO_TYPE to 'full'"
   MONO_TYPE="full"
