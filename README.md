@@ -1,4 +1,4 @@
-Mono buildpack for heroku, with the latest daily mono release.   [![](https://circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder.png?style=shield&circle-token=fe5a1697660ac8727b496f624407ea006b2069d7)](https://circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder)
+Mono buildpack for heroku, with the latest daily mono release.   [![](https://circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder.png?style=shield&circle-token=fe5a1697660ac8727b496f624407ea006b2069d7)](https://circleci.com/gh/adamburgess/heroku-buildpack-mono-builder)
 
 #### what to use this for
 
@@ -11,7 +11,7 @@ You can still run webservers; self-hosting OWIN and NancyFx work perfectly. I re
 
 1. Put a solution in the root directory of your app
 2. Use nuget to get dependencies
-3. Run `heroku buildpacks:set https://github.com/AdamBurgess/heroku-buildpack-mono` to set the buildpack
+3. Run `heroku buildpacks:set https://github.com/adamburgess/heroku-buildpack-mono` to set the buildpack
 4. Optionally configure the version of mono using a `.mono` file
 5. Add `mono ProjectName.exe` to your Procfile. Apps will be built into the root directory
 
@@ -41,8 +41,8 @@ MONO_CACHE=nope
 
 1. Someone pushes to [mono/mono](//github.com/mono/mono)
 2. Mono's CI server, [Jenkins](//jenkins.mono-project.com/job/test-mono-mainline/label=debian-amd64/), compiles and runs the test suite for mono.
-3. A [scheduled task](//github.com/AdamBurgess/heroku-buildpack-mono-watcher) checks Jenkins daily to see if a new build has completed and passed all tests.
-4. If it has, it creates a new commit in [another project](//github.com/AdamBurgess/heroku-buildpack-mono-builder) which makes [Circle CI](//circleci.com/gh/AdamBurgess/heroku-buildpack-mono-builder) start building Mono.
+3. A [scheduled task](//github.com/adamburgess/heroku-buildpack-mono-watcher) checks Jenkins daily to see if a new build has completed and passed all tests.
+4. If it has, it creates a new commit in [another project](//github.com/adamburgess/heroku-buildpack-mono-builder) which makes [Circle CI](//circleci.com/gh/adamburgess/heroku-buildpack-mono-builder) start building Mono.
 5. Once completed, it then creates a commit, tag, and release here, which is fetched by Heroku on building your app.
 
 #### full vs minimal builds
@@ -59,4 +59,4 @@ For most, the minimal build will work fine, and it is the default. Enable the fu
 
 #### * I want version [x] of Mono. How can I get it?
 
-Create a pull request in [AdamBurgess/heroku-buildpack-mono-builder](//github.com/AdamBurgess/heroku-buildpack-mono-builder) changing the `latest` file to the tag or commit that you want, and I'll merge and see that it builds successfully.
+Create a pull request in [adamburgess/heroku-buildpack-mono-builder](//github.com/adamburgess/heroku-buildpack-mono-builder) changing the `latest` file to the tag or commit that you want, and I'll merge and see that it builds successfully.
