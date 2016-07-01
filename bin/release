@@ -1,7 +1,3 @@
 #!/bin/bash
 
-cat <<EOF
----
-addons:
-default_process_types:
-EOF
+echo -e "---\ndefault_process_types:\n  web: exit 1"
