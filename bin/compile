@@ -133,23 +133,6 @@ if [ "${SLN}" == "" ]; then
   error "No *.sln file found"
 fi
 
-if [ $NUGET_STATUS -ne 0 ]; then
-  warn "Failed to download nuget - build may fail"
-else
-  topic "Installing NuGet packages"
-  # restore packages folder from cache
-  if [ -d $MONO_CACHE_DIR/packages ]; then
-    mkdir -p $BUILD_DIR/packages
-    cp -R $MONO_CACHE_DIR/packages/* $BUILD_DIR/packages
-  fi
-  mono $BUILDPACK_DIR/nuget.exe restore -NonInteractive | indent
-  # and copy it back
-  if [ -d $BUILD_DIR/packages ]; then
-    mkdir -p $MONO_CACHE_DIR/packages
-    cp -r $BUILD_DIR/packages/* $MONO_CACHE_DIR/packages
-  fi
-fi
-
 topic "Compiling .NET application"
 xbuild /property:Configuration=Release /property:OutDir=$BUILD_DIR/ $SLN
 
